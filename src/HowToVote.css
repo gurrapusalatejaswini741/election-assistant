@@ -1,0 +1,27 @@
+.how-to-vote{animation:fadeUp .4s ease both}
+.steps-timeline{display:flex;flex-direction:column;gap:0;position:relative}
+.step-card{position:relative;background:var(--navy-card);border:1px solid var(--border);
+           border-left:3px solid var(--step-color);border-radius:var(--radius-md);margin-bottom:12px;
+           transition:box-shadow .2s;overflow:hidden}
+.step-card:hover{box-shadow:var(--shadow-card)}
+.step-card--open{border-color:var(--step-color);box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.step-header{display:flex;align-items:flex-start;gap:14px;padding:16px;cursor:pointer;user-select:none}
+.step-badge{position:relative;width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-icon{font-size:1.4rem}
+.step-num{position:absolute;bottom:-4px;right:-4px;width:18px;height:18px;background:var(--navy);
+          border:2px solid var(--navy-card);border-radius:50%;font-size:.65rem;font-weight:700;
+          color:var(--text-primary);display:flex;align-items:center;justify-content:center;line-height:1}
+.step-info{flex:1;min-width:0}
+.step-title{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.step-preview{font-size:.82rem;color:var(--text-muted);line-height:1.4}
+.step-toggle{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;flex-shrink:0;margin-top:2px}
+.step-body{padding:0 16px 16px 78px;animation:fadeUp .2s ease both}
+.step-desc{font-size:.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:16px}
+.step-video{max-width:500px}
+.watch-step-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;background:transparent;
+                border:1px dashed var(--saffron);border-radius:var(--radius-md);color:var(--text-secondary);
+                font-family:var(--font-body);font-size:.82rem;cursor:pointer;transition:all .2s}
+.watch-step-btn:hover{background:var(--saffron-glow);color:var(--text-primary)}
+.wv-play{color:var(--saffron);font-size:.8rem}
+.watch-step-btn em{font-style:normal;color:var(--saffron-lt)}
+@media(max-width:600px){.step-body{padding-left:16px}}

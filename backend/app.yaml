@@ -1,0 +1,25 @@
+runtime: nodejs18
+
+env: standard
+entrypoint: node index.js
+
+env_variables:
+  NODE_ENV: production
+
+handlers:
+- url: /api/.*
+  script: auto
+  secure: always
+
+- url: /
+  static_files: ../build/index.html
+  upload: ../build/index.html
+  secure: always
+
+- url: /
+  static_dir: ../build
+  secure: always
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 10

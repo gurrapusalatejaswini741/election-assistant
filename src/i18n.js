@@ -1,0 +1,66 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+const resources = {
+  en: { translation: {
+    appName:'VoteReady India', tagline:"Your AI-powered guide to India's elections",
+    changeLanguage:'தமிழ்', chatbot:'Chatbot', howToVote:'How to Vote',
+    eligibility:'Check Eligibility', faqs:'FAQs', videos:'Videos',
+    chatPlaceholder:"Ask about India's election process…", send:'Send',
+    thinking:'Thinking…',
+    welcomeMessage:"Hello! I'm your Election Education Assistant 🇮🇳\n\nI can help you understand:\n• Voter registration process\n• How to vote using EVM\n• Election stages & results\n• Your eligibility to vote\n\nWhat would you like to know?",
+    errorMessage:"Sorry, I couldn't get a response. Please try again.",
+    watchVideo:'Watch Video Explanation', quickActions:'Quick Actions',
+    eligibilityTitle:'Voter Eligibility Checker',
+    eligibilitySubtitle:'Find out if you are eligible to vote in India',
+    ageLabel:'Your Age', agePlaceholder:'Enter your age',
+    citizenLabel:'Are you an Indian citizen?', yes:'Yes', no:'No',
+    checkBtn:'Check Eligibility',
+    eligible:'✅ You are eligible to vote!',
+    eligibleMsg:'Great news! You meet the basic criteria to register as a voter. Visit voters.eci.gov.in to register online.',
+    notEligible:'❌ You are not eligible to vote',
+    notEligibleAge:'You must be at least 18 years old to vote in India.',
+    notEligibleCitizen:'Only Indian citizens can vote in Indian elections.',
+    faqTitle:'Frequently Asked Questions',
+    faqSubtitle:"Common questions about India's election process",
+    loading:'Loading…',
+    stepsTitle:'How to Vote — Step by Step',
+    stepsSubtitle:'A complete guide from registration to casting your vote',
+    videosTitle:'Video Explanations',
+    videosSubtitle:"Watch and learn about India's election process",
+    footerNote:'Powered by AI · Information sourced from Election Commission of India',
+  }},
+  ta: { translation: {
+    appName:'VoteReady India', tagline:'இந்தியத் தேர்தல்களுக்கான AI வழிகாட்டி',
+    changeLanguage:'English', chatbot:'சாட்பாட்', howToVote:'வாக்களிப்பது எப்படி',
+    eligibility:'தகுதி சரிபார்க்க', faqs:'அடிக்கடி கேட்கப்படும் கேள்விகள்', videos:'வீடியோக்கள்',
+    chatPlaceholder:'தேர்தல் பற்றி கேளுங்கள்…', send:'அனுப்பு', thinking:'யோசிக்கிறேன்…',
+    welcomeMessage:'வணக்கம்! நான் உங்கள் தேர்தல் கல்வி உதவியாளர் 🇮🇳\n\nநான் உங்களுக்கு உதவலாம்:\n• வாக்காளர் பதிவு செயல்முறை\n• EVM மூலம் வாக்களிப்பது எப்படி\n• தேர்தல் நிலைகள் மற்றும் முடிவுகள்\n• வாக்களிக்க உங்கள் தகுதி\n\nநீங்கள் என்ன தெரிந்துகொள்ள விரும்புகிறீர்கள்?',
+    errorMessage:'மன்னிக்கவும், பதில் கிடைக்கவில்லை. மீண்டும் முயற்சிக்கவும்.',
+    watchVideo:'வீடியோ விளக்கம் பார்க்க', quickActions:'விரைவு செயல்கள்',
+    eligibilityTitle:'வாக்காளர் தகுதி சரிபார்ப்பு',
+    eligibilitySubtitle:'இந்தியாவில் வாக்களிக்க நீங்கள் தகுதியானவரா என்று தெரிந்துகொள்ளுங்கள்',
+    ageLabel:'உங்கள் வயது', agePlaceholder:'வயதை உள்ளிடவும்',
+    citizenLabel:'நீங்கள் இந்திய குடிமகனா?', yes:'ஆம்', no:'இல்லை',
+    checkBtn:'தகுதி சரிபார்க்க',
+    eligible:'✅ நீங்கள் வாக்களிக்க தகுதியானவர்!',
+    eligibleMsg:'நல்ல செய்தி! வாக்காளராக பதிவு செய்ய நீங்கள் அடிப்படை தகுதி பெற்றுள்ளீர்கள்.',
+    notEligible:'❌ நீங்கள் வாக்களிக்க தகுதியற்றவர்',
+    notEligibleAge:'இந்தியாவில் வாக்களிக்க குறைந்தது 18 வயதாவது இருக்க வேண்டும்.',
+    notEligibleCitizen:'இந்திய குடிமக்கள் மட்டுமே இந்திய தேர்தல்களில் வாக்களிக்க முடியும்.',
+    faqTitle:'அடிக்கடி கேட்கப்படும் கேள்விகள்',
+    faqSubtitle:'இந்தியத் தேர்தல் பற்றிய பொதுவான கேள்விகள்',
+    loading:'ஏற்றுகிறது…',
+    stepsTitle:'வாக்களிப்பது எப்படி — படிப்படியாக',
+    stepsSubtitle:'பதிவிலிருந்து வாக்களிப்பு வரை முழுமையான வழிகாட்டி',
+    videosTitle:'வீடியோ விளக்கங்கள்',
+    videosSubtitle:'இந்தியத் தேர்தல் பற்றி காட்சி மூலம் அறிந்துகொள்ளுங்கள்',
+    footerNote:'AI மூலம் இயக்கப்படுகிறது · இந்திய தேர்தல் ஆணையத்திலிருந்து தகவல்',
+  }},
+};
+
+i18n.use(initReactI18next).init({
+  resources, lng:'en', fallbackLng:'en',
+  interpolation:{escapeValue:false}
+});
+export default i18n;

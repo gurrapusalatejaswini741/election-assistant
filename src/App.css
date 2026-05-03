@@ -1,0 +1,12 @@
+.app-main{flex:1;padding-top:8px}
+.section-header{padding:28px 0 24px}
+.section-title{font-family:var(--font-display);font-size:clamp(1.3rem,2.5vw,1.8rem);
+               font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.section-sub{font-size:.9rem;color:var(--text-muted)}
+.app-footer{padding:24px 0 20px;border-top:1px solid var(--border);margin-top:24px;text-align:center}
+.footer-strip{display:flex;justify-content:center;gap:3px;margin-bottom:10px}
+.tc-s,.tc-w,.tc-g{display:block;width:24px;height:3px;border-radius:99px}
+.tc-s{background:var(--saffron)}.tc-w{background:var(--text-primary)}.tc-g{background:var(--green)}
+.footer-text{font-size:.78rem;color:var(--text-muted)}
+.footer-text a{color:var(--saffron);text-decoration:none}
+.footer-text a:hover{text-decoration:underline}
