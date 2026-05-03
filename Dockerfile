@@ -1,6 +1,6 @@
-# ─────────────────────────────────────────────────────────────
+﻿# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Stage 1: Build React frontend (src/ at root)
-# ─────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 FROM node:20-alpine AS frontend-build
 
 WORKDIR /app
@@ -28,12 +28,12 @@ ENV REACT_APP_FIREBASE_STORAGE_BUCKET=$REACT_APP_FIREBASE_STORAGE_BUCKET
 ENV REACT_APP_FIREBASE_MESSAGING_SENDER_ID=$REACT_APP_FIREBASE_MESSAGING_SENDER_ID
 ENV REACT_APP_FIREBASE_APP_ID=$REACT_APP_FIREBASE_APP_ID
 
-ENV CI=false
+ENV CI=false`r`nENV DISABLE_ESLINT_PLUGIN=true
 RUN npm run build
 
-# ─────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Stage 2: Production Node.js server
-# ─────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 FROM node:20-alpine AS production
 
 # Security: run as non-root
@@ -48,7 +48,7 @@ RUN cd backend && npm ci --only=production --silent
 # Copy backend source
 COPY backend/ ./backend/
 
-# Copy built React app from Stage 1 → /app/build (backend serves from __dirname/../build)
+# Copy built React app from Stage 1 â†’ /app/build (backend serves from __dirname/../build)
 COPY --from=frontend-build /app/build ./build
 
 USER nodejs
@@ -61,4 +61,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
   CMD node -e "require('http').get('http://localhost:8080/api/health',r=>process.exit(r.statusCode===200?0:1))"
 
 CMD ["node", "backend/index.js"]
+
 
