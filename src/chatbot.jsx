@@ -1,4 +1,4 @@
-// src/components/Chatbot.jsx — AI-powered chatbot interface
+﻿// src/components/Chatbot.jsx â€” AI-powered chatbot interface
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
@@ -9,21 +9,21 @@ import './chatbot.css';
 
 // Quick-action prompts that appear as chip buttons
 const QUICK_ACTIONS_EN = [
-  { label: '📋 How to Register', prompt: 'How do I register as a voter in India?' },
-  { label: '🗳️ How to Vote',     prompt: 'How do I vote using EVM at the polling booth?' },
-  { label: '✅ Am I Eligible?',  prompt: 'What are the eligibility criteria to vote in India?' },
-  { label: '🖥️ What is EVM?',   prompt: 'What is an Electronic Voting Machine (EVM)?' },
-  { label: '📊 How Results Work',prompt: 'How are election results counted and declared in India?' },
-  { label: '🗓️ Election Stages', prompt: 'What are the stages of the Indian election process?' },
+  { label: 'ðŸ“‹ How to Register', prompt: 'How do I register as a voter in India?' },
+  { label: 'ðŸ—³ï¸ How to Vote',     prompt: 'How do I vote using EVM at the polling booth?' },
+  { label: 'âœ… Am I Eligible?',  prompt: 'What are the eligibility criteria to vote in India?' },
+  { label: 'ðŸ–¥ï¸ What is EVM?',   prompt: 'What is an Electronic Voting Machine (EVM)?' },
+  { label: 'ðŸ“Š How Results Work',prompt: 'How are election results counted and declared in India?' },
+  { label: 'ðŸ—“ï¸ Election Stages', prompt: 'What are the stages of the Indian election process?' },
 ];
 
 const QUICK_ACTIONS_TA = [
-  { label: '📋 பதிவு செய்வது எப்படி', prompt: 'இந்தியாவில் வாக்காளராக பதிவு செய்வது எப்படி?' },
-  { label: '🗳️ வாக்களிப்பது எப்படி',  prompt: 'வாக்குச் சாவடியில் EVM மூலம் வாக்களிப்பது எப்படி?' },
-  { label: '✅ நான் தகுதியானவனா?',    prompt: 'இந்தியாவில் வாக்களிக்க என்ன தகுதிகள் தேவை?' },
-  { label: '🖥️ EVM என்றால் என்ன?',    prompt: 'மின்னணு வாக்குப் பதிவு இயந்திரம் (EVM) என்றால் என்ன?' },
-  { label: '📊 முடிவுகள் எப்படி வரும்', prompt: 'இந்தியாவில் தேர்தல் முடிவுகள் எவ்வாறு கணக்கிடப்படுகின்றன?' },
-  { label: '🗓️ தேர்தல் நிலைகள்',      prompt: 'இந்திய தேர்தல் செயல்முறையின் நிலைகள் என்ன?' },
+  { label: 'ðŸ“‹ à®ªà®¤à®¿à®µà¯ à®šà¯†à®¯à¯à®µà®¤à¯ à®Žà®ªà¯à®ªà®Ÿà®¿', prompt: 'à®‡à®¨à¯à®¤à®¿à®¯à®¾à®µà®¿à®²à¯ à®µà®¾à®•à¯à®•à®¾à®³à®°à®¾à®• à®ªà®¤à®¿à®µà¯ à®šà¯†à®¯à¯à®µà®¤à¯ à®Žà®ªà¯à®ªà®Ÿà®¿?' },
+  { label: 'ðŸ—³ï¸ à®µà®¾à®•à¯à®•à®³à®¿à®ªà¯à®ªà®¤à¯ à®Žà®ªà¯à®ªà®Ÿà®¿',  prompt: 'à®µà®¾à®•à¯à®•à¯à®šà¯ à®šà®¾à®µà®Ÿà®¿à®¯à®¿à®²à¯ EVM à®®à¯‚à®²à®®à¯ à®µà®¾à®•à¯à®•à®³à®¿à®ªà¯à®ªà®¤à¯ à®Žà®ªà¯à®ªà®Ÿà®¿?' },
+  { label: 'âœ… à®¨à®¾à®©à¯ à®¤à®•à¯à®¤à®¿à®¯à®¾à®©à®µà®©à®¾?',    prompt: 'à®‡à®¨à¯à®¤à®¿à®¯à®¾à®µà®¿à®²à¯ à®µà®¾à®•à¯à®•à®³à®¿à®•à¯à®• à®Žà®©à¯à®© à®¤à®•à¯à®¤à®¿à®•à®³à¯ à®¤à¯‡à®µà¯ˆ?' },
+  { label: 'ðŸ–¥ï¸ EVM à®Žà®©à¯à®±à®¾à®²à¯ à®Žà®©à¯à®©?',    prompt: 'à®®à®¿à®©à¯à®©à®£à¯ à®µà®¾à®•à¯à®•à¯à®ªà¯ à®ªà®¤à®¿à®µà¯ à®‡à®¯à®¨à¯à®¤à®¿à®°à®®à¯ (EVM) à®Žà®©à¯à®±à®¾à®²à¯ à®Žà®©à¯à®©?' },
+  { label: 'ðŸ“Š à®®à¯à®Ÿà®¿à®µà¯à®•à®³à¯ à®Žà®ªà¯à®ªà®Ÿà®¿ à®µà®°à¯à®®à¯', prompt: 'à®‡à®¨à¯à®¤à®¿à®¯à®¾à®µà®¿à®²à¯ à®¤à¯‡à®°à¯à®¤à®²à¯ à®®à¯à®Ÿà®¿à®µà¯à®•à®³à¯ à®Žà®µà¯à®µà®¾à®±à¯ à®•à®£à®•à¯à®•à®¿à®Ÿà®ªà¯à®ªà®Ÿà¯à®•à®¿à®©à¯à®±à®©?' },
+  { label: 'ðŸ—“ï¸ à®¤à¯‡à®°à¯à®¤à®²à¯ à®¨à®¿à®²à¯ˆà®•à®³à¯',      prompt: 'à®‡à®¨à¯à®¤à®¿à®¯ à®¤à¯‡à®°à¯à®¤à®²à¯ à®šà¯†à®¯à®²à¯à®®à¯à®±à¯ˆà®¯à®¿à®©à¯ à®¨à®¿à®²à¯ˆà®•à®³à¯ à®Žà®©à¯à®©?' },
 ];
 
 export default function Chatbot() {
@@ -33,8 +33,8 @@ export default function Chatbot() {
   const [messages, setMessages]   = useState([]);
   const [input, setInput]         = useState('');
   const [loading, setLoading]     = useState(false);
-  const [videoMap, setVideoMap]   = useState({}); // msgIndex → video
-  const [showVideo, setShowVideo] = useState({}); // msgIndex → bool
+  const [videoMap, setVideoMap]   = useState({}); // msgIndex â†’ video
+  const [showVideo, setShowVideo] = useState({}); // msgIndex â†’ bool
 
   const messagesEndRef = useRef(null);
   const inputRef       = useRef(null);
@@ -46,8 +46,7 @@ export default function Chatbot() {
       content: t('welcomeMessage'),
       timestamp: new Date(),
     }]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    }, []);
 
   // Update welcome message on language change
   useEffect(() => {
@@ -57,8 +56,7 @@ export default function Chatbot() {
       updated[0] = { ...updated[0], content: t('welcomeMessage') };
       return updated;
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language]);
+    }, [i18n.language]);
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -144,7 +142,7 @@ export default function Chatbot() {
             style={{ animationDelay: `${idx * 0.03}s` }}
           >
             {msg.role === 'assistant' && (
-              <div className="avatar" aria-hidden="true">🇮🇳</div>
+              <div className="avatar" aria-hidden="true">ðŸ‡®ðŸ‡³</div>
             )}
 
             <div className="bubble-wrap">
@@ -162,7 +160,7 @@ export default function Chatbot() {
                       className="watch-video-btn"
                       onClick={() => setShowVideo(sv => ({ ...sv, [idx]: true }))}
                     >
-                      <span className="wv-icon">▶</span>
+                      <span className="wv-icon">â–¶</span>
                       {t('watchVideo')}: <strong>{videoMap[idx].title}</strong>
                     </button>
                   )}
@@ -175,7 +173,7 @@ export default function Chatbot() {
             </div>
 
             {msg.role === 'user' && (
-              <div className="avatar avatar--user" aria-hidden="true">👤</div>
+              <div className="avatar avatar--user" aria-hidden="true">ðŸ‘¤</div>
             )}
           </div>
         ))}
@@ -183,7 +181,7 @@ export default function Chatbot() {
         {/* Typing indicator */}
         {loading && (
           <div className="message-row message-row--assistant">
-            <div className="avatar">🇮🇳</div>
+            <div className="avatar">ðŸ‡®ðŸ‡³</div>
             <div className="bubble bubble--assistant bubble--typing">
               <span className="dot" /><span className="dot" /><span className="dot" />
             </div>
