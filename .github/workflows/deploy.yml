@@ -1,86 +1,33 @@
-name: 🇮🇳 Deploy to Google Cloud Run
+name: Deploy
 
 on:
   push:
     branches: [main, master]
-  pull_request:
-    branches: [main, master]
-
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SERVICE_NAME: election-assistant
-  REGION: asia-south1
-  IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/election-assistant
 
 jobs:
-  build-and-deploy:
-    name: 🚀 Build & Deploy
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 🔐 Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+      - uses: google-github-actions/auth@v2
         with:
-          credentials_json: `${{ secrets.GCP_SA_KEY }}
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
-      - name: 🐳 Configure Docker for GCR
-        run: gcloud auth configure-docker --quiet
+      - run: gcloud auth configure-docker --quiet
 
-      - name: 🏗️ Build Docker image
-        run: |
-          docker build \
-            --build-arg REACT_APP_FIREBASE_API_KEY="${{ secrets.REACT_APP_FIREBASE_API_KEY }}" \
-            --build-arg REACT_APP_FIREBASE_AUTH_DOMAIN="${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}" \
-            --build-arg REACT_APP_FIREBASE_PROJECT_ID="${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}" \
-            --build-arg REACT_APP_FIREBASE_STORAGE_BUCKET="${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }}" \
-            --build-arg REACT_APP_FIREBASE_MESSAGING_SENDER_ID="${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }}" \
-            --build-arg REACT_APP_FIREBASE_APP_ID="${{ secrets.REACT_APP_FIREBASE_APP_ID }}" \
-            -t ${{ env.IMAGE }}:latest \
-            -t ${{ env.IMAGE }}:${{ github.sha }} \
-            .
+      - run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/election-assistant:${{ github.sha }} .
 
-      - name: 📤 Push to Container Registry
-        run: |
-          docker push ${{ env.IMAGE }}:latest
-          docker push ${{ env.IMAGE }}:${{ github.sha }}
+      - run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/election-assistant:${{ github.sha }}
 
-      - name: ☁️ Deploy to Cloud Run
+      - uses: google-github-actions/deploy-cloudrun@v2
         id: deploy
-        uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ${{ env.SERVICE_NAME }}
-          region:  ${{ env.REGION }}
-          image:   ${{ env.IMAGE }}:${{ github.sha }}
-          flags: >-
-            --allow-unauthenticated
-            --port=8080
-            --memory=512Mi
-            --cpu=1
-            --min-instances=0
-            --max-instances=10
-            --timeout=60s
-          env_vars: |
-            NODE_ENV=production
-          secrets: |
-            OPENAI_API_KEY=openai-api-key:latest
-            FIREBASE_SERVICE_ACCOUNT_JSON=firebase-service-account:latest
-            ADMIN_SECRET=admin-secret:latest
+          service: election-assistant
+          region: asia-south1
+          image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/election-assistant:${{ github.sha }}
+          flags: '--allow-unauthenticated --port=8080 --memory=512Mi'
+          env_vars: 'NODE_ENV=production'
+          secrets: 'OPENAI_API_KEY=openai-api-key:latest,FIREBASE_SERVICE_ACCOUNT_JSON=firebase-service-account:latest,ADMIN_SECRET=admin-secret:latest'
 
-      - name: ✅ Print deployed URL
-        run: |
-          echo "════════════════════════════════════════"
-          echo "  🇮🇳  VoteReady India is LIVE!"
-          echo "  URL: ${{ steps.deploy.outputs.url }}"
-          echo "════════════════════════════════════════"
-
-      - name: 🔍 Health check
-        run: |
-          sleep 15
-          URL="${{ steps.deploy.outputs.url }}/api/health"
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
-          echo "Health check → $URL → HTTP $STATUS"
-          [ "$STATUS" = "200" ] && echo "✅ Healthy!" || (echo "❌ Health check failed" && exit 1)
-
+      - run: echo "URL=${{ steps.deploy.outputs.url }}"
