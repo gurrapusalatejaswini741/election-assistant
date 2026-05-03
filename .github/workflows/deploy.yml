@@ -1,27 +1,20 @@
 name: Deploy
-
 on:
   push:
-    branches: [main, master]
-
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
-
       - run: gcloud auth configure-docker --quiet
-
       - run: docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/election-assistant:${{ github.sha }} .
-
       - run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/election-assistant:${{ github.sha }}
-
-      - uses: google-github-actions/deploy-cloudrun@v2
-        id: deploy
+      - id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: election-assistant
           region: asia-south1
@@ -29,5 +22,4 @@ jobs:
           flags: '--allow-unauthenticated --port=8080 --memory=512Mi'
           env_vars: 'NODE_ENV=production'
           secrets: 'OPENAI_API_KEY=openai-api-key:latest,FIREBASE_SERVICE_ACCOUNT_JSON=firebase-service-account:latest,ADMIN_SECRET=admin-secret:latest'
-
-      - run: echo "URL=${{ steps.deploy.outputs.url }}"
+      - run: echo "${{ steps.deploy.outputs.url }}"
