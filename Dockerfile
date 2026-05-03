@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install frontend deps (package.json at root)
 COPY package*.json ./
-RUN npm ci --silent
+RUN npm install --silent
 
 # Copy React source files
 COPY src/ ./src/
